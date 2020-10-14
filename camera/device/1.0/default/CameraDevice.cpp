@@ -430,7 +430,6 @@ void CameraDevice::sDataCb(int32_t msg_type, const camera_memory_t *data, unsign
              index, mem->mNumBufs);
         return;
     }
-#ifdef QTI_CAMERA_DEVICE
     if(object->mQDeviceCallback != nullptr) {
          vendor::qti::hardware::camera::device::V1_0::QCameraFrameMetadata hidlMetadata;
          if (metadata) {
@@ -468,7 +467,6 @@ void CameraDevice::sDataCb(int32_t msg_type, const camera_memory_t *data, unsign
          object->mQDeviceCallback->QDataCallback(
                  (DataCallbackMsg) msg_type, mem->handle.mId, index, hidlMetadata);
     } else {
-#endif
        if (object->mDeviceCallback != nullptr) {
            CameraFrameMetadata hidlMetadata;
            if (metadata) {
@@ -493,9 +491,7 @@ void CameraDevice::sDataCb(int32_t msg_type, const camera_memory_t *data, unsign
            CameraHeapMemory* mem = static_cast<CameraHeapMemory *>(data->handle);
            object->mDeviceCallback->dataCallback(
                    (DataCallbackMsg) msg_type, mem->handle.mId, index, hidlMetadata);
-#ifdef QTI_CAMERA_DEVICE
        }
-#endif
     }
 }
 
@@ -711,13 +707,11 @@ Return<Status> CameraDevice::open(const sp<ICameraDeviceCallback>& callback) {
 
     initHalPreviewWindow();
     mDeviceCallback = callback;
-#ifdef QTI_CAMERA_DEVICE
     mQDeviceCallback =
         vendor::qti::hardware::camera::device::V1_0::IQCameraDeviceCallback::castFrom(callback);
     if(mQDeviceCallback == nullptr) {
         ALOGI("could not cast ICameraDeviceCallback to IQCameraDeviceCallback");
     }
-#endif
 
     if (mDevice->ops->set_callbacks) {
         mDevice->ops->set_callbacks(mDevice,
