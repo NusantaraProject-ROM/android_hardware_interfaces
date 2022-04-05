@@ -67,14 +67,4 @@ interface IBiometricsFingerprint extends @2.2::IBiometricsFingerprint {
      * previously caused a "finger down" event will be reported.
      */
     onFingerUp();
-
-    /**
-     * Called when an Udfps overlay is shown
-     */
-    onShowUdfpsOverlay();
-
-    /**
-     * Called when an Udfps overlay is hidden
-     */
-    onHideUdfpsOverlay();
 };
